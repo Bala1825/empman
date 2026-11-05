@@ -263,6 +263,18 @@ const remainingMinutes = totalMinutes % 60;
             </Title>
           </Card>
         </Col>
+        <Col xs={24} sm={12} lg={8}>
+          <Card className="attendance-summary-card">
+            <Space>
+              <ClockCircleOutlined className="attendance-icon" />
+              <Text type="secondary">Total Working Hours</Text>
+            </Space>
+        
+            <Title level={3}>
+              {totalHours}h {remainingMinutes}m
+            </Title>
+          </Card>
+        </Col>
       </Row>
 
       <Card className="attendance-history-card">

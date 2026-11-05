@@ -1,18 +1,24 @@
 
 .attendance-page {
   display: flex;
+  flex-direction: column;
   width: 100%;
-  padding-left: 210px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .full-width {
   width: 100%;
+  min-width: 0;
 }
 
 .attendance-entry-card,
 .attendance-summary-card,
 .attendance-history-card {
   border-radius: 12px;
+  min-width: 0;
 }
 
 .attendance-entry-card,
@@ -56,8 +62,21 @@
   background: #f5f8f6;
 }
 
+
 @media (max-width: 576px) {
   .attendance-page {
-    padding: 16px;
+    padding: 0;
+  }
+
+  .attendance-page > .ant-space {
+    max-width: 100%;
+  }
+
+  .attendance-summary-card .ant-typography {
+    font-size: 22px;
+  }
+
+  .attendance-add-button {
+    width: 100%;
   }
 }

@@ -93,7 +93,7 @@ function Navbar() {
   const allItems = [...menuItems];
 
   return (
-    <Sider width={230} className="sidebar">
+    <Sider width="100%" className="sidebar">
       <Space direction="vertical" size="large" className="sidebar-content">
 
         <Title level={3} className="sidebar-brand">

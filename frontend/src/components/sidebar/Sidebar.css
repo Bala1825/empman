@@ -1,18 +1,25 @@
+
 .sidebar {
-  min-height: 100vh;
-  background: 	#168653;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
+  width: 100% !important;
+  height: 100%;
+  min-height: 0;
+  background: #168653 !important;
+  position: relative;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar-content {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   padding: 24px 12px;
   box-sizing: border-box;
+}
+
+.sidebar-content > .ant-space-item:last-child {
+  margin-top: auto;
 }
 
 .sidebar-brand {
@@ -28,8 +35,8 @@
 }
 
 .sidebar-menu .ant-menu-item {
-  margin: 6px 0;
   width: 100%;
+  margin: 6px 0;
   color: white;
   border-radius: 8px;
 }
@@ -49,14 +56,14 @@
   color: white !important;
 }
 
+/* User information and logout */
 .sidebar-user {
-  width: 230px;
-  margin-bottom: 20px;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: 0;
   padding: 12px;
   box-sizing: border-box;
-  position: fixed;
-  left: 0;
-  bottom: 0;
+  position: relative;
 }
 
 .sidebar-email {

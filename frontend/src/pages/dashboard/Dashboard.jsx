@@ -18,7 +18,7 @@ function Dashboard() {
     },
     {
       title: "Events",
-      description: "View upcoming company events",
+      description: "View upcoming company evaents",
       icon: "🎉",
       link: "/dashboard",
     },
