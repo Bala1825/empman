@@ -1,6 +1,4 @@
 
-/* Reset */
-
 * {
   box-sizing: border-box;
 }
@@ -18,7 +16,6 @@ body {
   overflow: hidden;
 }
 
-/* Main Application Layout */
 
 .app-layout {
   display: grid;
@@ -32,8 +29,6 @@ body {
   background: #f8fafc;
 }
 
-/* Sidebar Layout */
-
 .sidebar-layout {
   width: 250px;
   height: 100%;
@@ -46,7 +41,6 @@ body {
   border-right: 1px solid #e5eaf2;
 }
 
-/* Main Layout */
 
 .main-layout {
   display: grid;
@@ -60,7 +54,6 @@ body {
   overflow: hidden;
 }
 
-/* Header Layout */
 
 .header-layout {
   width: 100%;
@@ -72,8 +65,6 @@ body {
   position: relative;
   z-index: 5;
 }
-
-/* Body Layout */
 
 .body-layout {
   width: 100%;
@@ -88,8 +79,6 @@ body {
   background: #f8fafc;
 }
 
-/* Tablet */
-
 @media (max-width: 900px) {
   .app-layout {
     grid-template-columns: 210px minmax(0, 1fr);
@@ -103,8 +92,6 @@ body {
     padding: 20px;
   }
 }
-
-/* Mobile - temporary sidebar hiding */
 
 @media (max-width: 600px) {
   .app-layout {
