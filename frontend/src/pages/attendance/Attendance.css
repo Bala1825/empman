@@ -1,0 +1,63 @@
+
+.attendance-page {
+  display: flex;
+  width: 100%;
+  padding-left: 210px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.attendance-entry-card,
+.attendance-summary-card,
+.attendance-history-card {
+  border-radius: 12px;
+}
+
+.attendance-entry-card,
+.attendance-history-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.attendance-input {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.attendance-add-button {
+  background: #198754;
+  height: 40px;
+  border-radius: 7px;
+}
+
+.attendance-add-button:hover {
+  background: #146c43 !important;
+}
+
+.attendance-icon {
+  font-size: 22px;
+  color: #198754;
+}
+
+.attendance-summary-card {
+  height: 100%;
+}
+
+.attendance-summary-card .ant-typography {
+  margin-bottom: 0;
+}
+
+.attendance-history-card {
+  width: 100%;
+}
+
+.attendance-history-card .ant-table-thead > tr > th {
+  background: #f5f8f6;
+}
+
+@media (max-width: 576px) {
+  .attendance-page {
+    padding: 16px;
+  }
+}

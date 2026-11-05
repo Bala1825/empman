@@ -1,0 +1,11 @@
+
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f1f5f9;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}

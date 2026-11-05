@@ -1,0 +1,83 @@
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 36px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+  box-sizing: border-box;
+}
+
+.login-heading {
+  margin-bottom: 28px;
+}
+
+.login-heading h1 {
+  margin: 0 0 10px;
+  color: #0f172a;
+  font-size: 28px;
+}
+
+.login-heading p,
+.login-demo {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-form label {
+  margin-top: 8px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+
+.login-form input:focus {
+  outline: 2px solid #93c5fd;
+  border-color: #2563eb;
+}
+
+.login-form button {
+  margin-top: 12px;
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  background: #273f27d3;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background: #273f27d3;
+}
+
+.login-error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 14px;
+}
+
+.login-demo {
+  margin: 22px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
