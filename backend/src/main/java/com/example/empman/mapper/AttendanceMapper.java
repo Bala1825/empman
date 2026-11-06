@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class AttendanceMapper {
 
-    // Convert Request DTO into MongoDB Document
     public Attendance toEntity(AttendanceRequest request) {
 
         Attendance attendance = new Attendance();
@@ -23,7 +22,6 @@ public class AttendanceMapper {
         return attendance;
     }
 
-    // Convert MongoDB Document into Response DTO
     public AttendanceResponse toResponse(Attendance attendance) {
 
         return new AttendanceResponse(

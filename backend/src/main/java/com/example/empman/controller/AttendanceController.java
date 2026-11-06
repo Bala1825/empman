@@ -64,8 +64,8 @@ public class AttendanceController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAttendance(@PathVariable String id) {
-
+    public void deleteAttendance(@PathVariable Long id) {
+    
         attendanceService.deleteAttendance(id);
     }
 }

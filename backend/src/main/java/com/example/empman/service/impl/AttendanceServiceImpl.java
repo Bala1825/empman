@@ -15,21 +15,18 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
 
-    // Constructor injection
     public AttendanceServiceImpl(
             AttendanceRepository attendanceRepository) {
 
         this.attendanceRepository = attendanceRepository;
     }
 
-    // Save attendance
     @Override
     public Attendance saveAttendance(Attendance attendance) {
 
         return attendanceRepository.save(attendance);
     }
 
-    // Retrieve attendance by employee and date
     @Override
     public List<Attendance> getAttendanceByEmployeeAndDate(
             Long employeeId,
@@ -42,9 +39,8 @@ public class AttendanceServiceImpl implements AttendanceService {
                 );
     }
 
-    // Delete attendance
     @Override
-    public void deleteAttendance(String id) {
+    public void deleteAttendance(Long id) {
 
         if (!attendanceRepository.existsById(id)) {
             throw new RuntimeException(
