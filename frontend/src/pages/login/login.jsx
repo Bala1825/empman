@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 import {
@@ -43,16 +43,16 @@ function Login() {
 
     setLoading(true);
 
-    if (
-      email.trim().toLowerCase() !== "admin@example.com" ||
-      password !== "Admin123!"
-    ) {
+    const success = login(
+      email.trim().toLowerCase(),
+      password
+    );
+
+    if (!success) {
       setError("Invalid email or password.");
       setLoading(false);
       return;
     }
-
-    login(email.trim().toLowerCase());
 
     navigate(location.state?.from || "/dashboard", {
       replace: true
@@ -63,7 +63,6 @@ function Login() {
 
   return (
     <div className="login-container">
-
       <Card className="login-card">
 
         <div className="login-heading">
@@ -165,6 +164,13 @@ function Login() {
 
         </Form>
 
+        <div className="login-register">
+          <Text type="secondary">
+            Don't have an account?{" "}
+            <Link to="/register">Create an account</Link>
+          </Text>
+        </div>
+
         <div className="login-demo">
 
           <Text strong>
@@ -182,7 +188,6 @@ function Login() {
         </div>
 
       </Card>
-
     </div>
   );
 }

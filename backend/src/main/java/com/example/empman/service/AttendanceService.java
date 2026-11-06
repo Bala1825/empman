@@ -14,6 +14,6 @@ public interface AttendanceService {
             Long employeeId,
             LocalDate attendanceDate
     );
-
-    void deleteAttendance(Long id);
+    
+    void deleteAttendance(String id);
 }

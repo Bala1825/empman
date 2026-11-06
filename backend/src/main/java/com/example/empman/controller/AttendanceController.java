@@ -32,7 +32,6 @@ public class AttendanceController {
         this.attendanceMapper = attendanceMapper;
     }
 
-    // Save attendance
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AttendanceResponse saveAttendance(
@@ -46,7 +45,7 @@ public class AttendanceController {
         return attendanceMapper.toResponse(savedAttendance);
     }
 
-    // Get attendance by employee and date
+
     @GetMapping
     public List<AttendanceResponse> getAttendance(
             @RequestParam Long employeeId,
@@ -63,10 +62,9 @@ public class AttendanceController {
                 .toList();
     }
 
-    // Delete attendance
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAttendance(@PathVariable Long id) {
+    public void deleteAttendance(@PathVariable String id) {
 
         attendanceService.deleteAttendance(id);
     }

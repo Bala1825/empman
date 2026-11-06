@@ -1,38 +1,34 @@
 
 package com.example.empman.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
-@Table(name = "attendance")
+@Document(collection = "attendance")
 public class Attendance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(nullable = false)
     private Long employeeId;
 
-    @Column(nullable = false)
     private LocalDate attendanceDate;
 
-    @Column(nullable = false)
     private String entryType;
 
-    @Column(nullable = false)
     private LocalTime entryTime;
 
     public Attendance() {
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

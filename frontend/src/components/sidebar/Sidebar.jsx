@@ -94,7 +94,7 @@ function Navbar() {
 
   return (
     <Sider width="100%" className="sidebar">
-      <Space direction="vertical" size="large" className="sidebar-content">
+      <Space orientation="vertical" size="large" className="sidebar-content">
 
         <Title level={3} className="sidebar-brand">
           EmpManage

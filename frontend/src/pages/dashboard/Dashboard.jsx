@@ -128,7 +128,7 @@ function Dashboard() {
             >
 
               <Space
-                direction="vertical"
+                orientation="vertical"
                 size={16}
                 className="dashboard-card-content"
               >

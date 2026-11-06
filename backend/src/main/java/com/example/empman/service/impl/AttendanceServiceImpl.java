@@ -5,32 +5,32 @@ import com.example.empman.entity.Attendance;
 import com.example.empman.repository.AttendanceRepository;
 import com.example.empman.service.AttendanceService;
 
-import jakarta.persistence.EntityNotFoundException;
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
-@Transactional
 public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
 
     // Constructor injection
-    public AttendanceServiceImpl(AttendanceRepository attendanceRepository) {
+    public AttendanceServiceImpl(
+            AttendanceRepository attendanceRepository) {
+
         this.attendanceRepository = attendanceRepository;
     }
 
+    // Save attendance
     @Override
     public Attendance saveAttendance(Attendance attendance) {
+
         return attendanceRepository.save(attendance);
     }
 
+    // Retrieve attendance by employee and date
     @Override
-    @Transactional(readOnly = true)
     public List<Attendance> getAttendanceByEmployeeAndDate(
             Long employeeId,
             LocalDate attendanceDate) {
@@ -42,11 +42,12 @@ public class AttendanceServiceImpl implements AttendanceService {
                 );
     }
 
+    // Delete attendance
     @Override
-    public void deleteAttendance(Long id) {
+    public void deleteAttendance(String id) {
 
         if (!attendanceRepository.existsById(id)) {
-            throw new EntityNotFoundException(
+            throw new RuntimeException(
                     "Attendance record not found with ID: " + id
             );
         }

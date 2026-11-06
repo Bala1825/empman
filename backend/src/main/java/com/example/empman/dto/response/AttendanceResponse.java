@@ -6,7 +6,7 @@ import java.time.LocalTime;
 
 public class AttendanceResponse {
 
-    private Long id;
+    private String id;
     private Long employeeId;
     private LocalDate attendanceDate;
     private String entryType;
@@ -16,7 +16,7 @@ public class AttendanceResponse {
     }
 
     public AttendanceResponse(
-            Long id,
+            String id,
             Long employeeId,
             LocalDate attendanceDate,
             String entryType,
@@ -29,7 +29,7 @@ public class AttendanceResponse {
         this.entryTime = entryTime;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
