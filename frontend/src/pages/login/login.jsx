@@ -2,19 +2,38 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+
+import {
+  Card,
+  Form,
+  Input,
+  Button,
+  Typography,
+  Alert
+} from "antd";
+
+import {
+  UserOutlined,
+  LockOutlined,
+  LoginOutlined
+} from "@ant-design/icons";
+
 import "./Login.css";
+
+const { Title, Text } = Typography;
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
+
   const navigate = useNavigate();
   const location = useLocation();
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  function handleSubmit() {
     setError("");
 
     if (!email.trim() || !password) {
@@ -22,60 +41,149 @@ function Login() {
       return;
     }
 
-    if (email.trim().toLowerCase() !== "admin@example.com" ||
-        password !== "Admin123!") {
+    setLoading(true);
+
+    if (
+      email.trim().toLowerCase() !== "admin@example.com" ||
+      password !== "Admin123!"
+    ) {
       setError("Invalid email or password.");
+      setLoading(false);
       return;
     }
 
     login(email.trim().toLowerCase());
 
     navigate(location.state?.from || "/dashboard", {
-      replace: true,
+      replace: true
     });
+
+    setLoading(false);
   }
 
   return (
-    <section className="login-card">
-      <div className="login-heading">
-        <h1>Welcome back</h1>
-        <p>Sign in to continue to your account.</p>
-      </div>
+    <div className="login-container">
 
-      <form onSubmit={handleSubmit} className="login-form">
-        <label htmlFor="email">Email address</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="admin@example.com"
-          autoComplete="username"
-          required
-        />
+      <Card className="login-card">
 
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          placeholder="Enter your password"
-          autoComplete="current-password"
-          required
-        />
+        <div className="login-heading">
 
-        {error && <p className="login-error" role="alert">{error}</p>}
+          <div className="login-logo">
+            <LoginOutlined />
+          </div>
 
-        <button type="submit">Sign in</button>
-      </form>
+          <Title level={2}>
+            Welcome back
+          </Title>
 
-      <p className="login-demo">
-        email: admin@example.com
-        <br />
-        password: Admin123!
-      </p>
-    </section>
+          <Text type="secondary">
+            Sign in to continue to your account.
+          </Text>
+
+        </div>
+
+        {error && (
+          <Alert
+            message={error}
+            type="error"
+            showIcon
+            closable
+            onClose={() => setError("")}
+            className="login-error"
+          />
+        )}
+
+        <Form
+          layout="vertical"
+          onFinish={handleSubmit}
+          requiredMark={false}
+          className="login-form"
+        >
+
+          <Form.Item
+            label="Email address"
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: "Please enter your email."
+              },
+              {
+                type: "email",
+                message: "Please enter a valid email."
+              }
+            ]}
+          >
+
+            <Input
+              size="large"
+              prefix={<UserOutlined />}
+              placeholder="Enter your email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              autoComplete="username"
+            />
+
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please enter your password."
+              }
+            ]}
+          >
+
+            <Input.Password
+              size="large"
+              prefix={<LockOutlined />}
+              placeholder="Enter your password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
+            />
+
+          </Form.Item>
+
+          <Form.Item className="login-submit-item">
+
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              loading={loading}
+              className="login-button"
+            >
+              Sign In
+            </Button>
+
+          </Form.Item>
+
+        </Form>
+
+        <div className="login-demo">
+
+          <Text strong>
+            Demo Credentials
+          </Text>
+
+          <Text type="secondary">
+            Email: admin@example.com
+          </Text>
+
+          <Text type="secondary">
+            Password: Admin123!
+          </Text>
+
+        </div>
+
+      </Card>
+
+    </div>
   );
 }
 

@@ -1,90 +1,183 @@
 
 import { Link } from "react-router-dom";
+
+import {
+  Row,
+  Col,
+  Card,
+  Typography,
+  Space,
+  Button
+} from "antd";
+
+import {
+  CalendarOutlined,
+  BarChartOutlined,
+  GiftOutlined,
+  TeamOutlined,
+  CoffeeOutlined,
+  FileTextOutlined,
+  CheckCircleOutlined,
+  SmileOutlined,
+  RightOutlined
+} from "@ant-design/icons";
+
 import "./Dashboard.css";
 
+const { Title, Text } = Typography;
+
 function Dashboard() {
+
   const dashboardCards = [
     {
       title: "Attendance",
       description: "View your attendance records",
-      icon: "📅",
+      icon: <CalendarOutlined />,
       link: "/attendance",
+      color: "#1677ff",
+      background: "#e6f4ff"
     },
     {
       title: "Work Progress",
       description: "Track your ongoing work",
-      icon: "📊",
+      icon: <BarChartOutlined />,
       link: "/dashboard",
+      color: "#13a8a8",
+      background: "#e6fffb"
     },
     {
       title: "Events",
-      description: "View upcoming company evaents",
-      icon: "🎉",
+      description: "View upcoming company events",
+      icon: <GiftOutlined />,
       link: "/dashboard",
+      color: "#eb2f96",
+      background: "#fff0f6"
     },
     {
       title: "People",
       description: "View your team members",
-      icon: "👥",
-      link: "/dashboard",
+      icon: <TeamOutlined />,
+      link: "/people",
+      color: "#722ed1",
+      background: "#f9f0ff"
     },
     {
       title: "Leave Balance",
       description: "Check your available leave days",
-      icon: "🏖️",
+      icon: <CoffeeOutlined />,
       link: "/dashboard",
+      color: "#fa8c16",
+      background: "#fff7e6"
     },
     {
       title: "Pending Tasks",
       description: "Review tasks that need attention",
-      icon: "📝",
+      icon: <FileTextOutlined />,
       link: "/dashboard",
+      color: "#d48806",
+      background: "#fffbe6"
     },
     {
       title: "Completed Tasks",
       description: "Review your completed work",
-      icon: "✅",
+      icon: <CheckCircleOutlined />,
       link: "/dashboard",
+      color: "#389e0d",
+      background: "#f6ffed"
     },
     {
       title: "Upcoming Holidays",
       description: "Check upcoming holidays",
-      icon: "🎊",
-      link: "/notfound/notfound.jsx",
-    },
+      icon: <SmileOutlined />,
+      link: "/dashboard",
+      color: "#cf1322",
+      background: "#fff1f0"
+    }
   ];
 
   return (
     <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>Dashboard</h1>
 
-        <p className="dashboard-welcome">
+      <div className="dashboard-header">
+
+        <Title level={2}>
+          Dashboard
+        </Title>
+
+        <Text type="secondary">
           Welcome back! Here's your workspace overview.
-        </p>
+        </Text>
+
       </div>
 
-      <div className="dashboard-cards">
+      <Row gutter={[20, 20]}>
+
         {dashboardCards.map((card) => (
-          <Link
-            to={card.link}
-            className="dashboard-card"
+
+          <Col
+            xs={24}
+            sm={12}
+            lg={8}
+            xl={6}
             key={card.title}
           >
-            <div className="dashboard-card-icon">
-              {card.icon}
-            </div>
 
-            <h2>{card.title}</h2>
+            <Card
+              hoverable
+              className="dashboard-card"
+            >
 
-            <p>{card.description}</p>
+              <Space
+                direction="vertical"
+                size={16}
+                className="dashboard-card-content"
+              >
 
-            <span className="dashboard-card-link">
-              View details →
-            </span>
-          </Link>
+                <div
+                  className="dashboard-card-icon"
+                  style={{
+                    color: card.color,
+                    backgroundColor: card.background
+                  }}
+                >
+                  {card.icon}
+                </div>
+
+                <div>
+
+                  <Title level={4}>
+                    {card.title}
+                  </Title>
+
+                  <Text type="secondary">
+                    {card.description}
+                  </Text>
+
+                </div>
+
+                <Button
+                  type="link"
+                  className="dashboard-card-button"
+                  icon={<RightOutlined />}
+                  iconPlacement="end"
+                  block
+                  href={undefined}
+                >
+                  <Link to={card.link}>
+                    View Details
+                  </Link>
+                </Button>
+
+              </Space>
+
+            </Card>
+
+          </Col>
+
         ))}
-      </div>
+
+      </Row>
+
     </div>
   );
 }

@@ -15,7 +15,10 @@ import {
   Table,
   Tag,
   message,
-  Popconfirm
+  Popconfirm,
+  Statistic,
+  Form,
+  Empty
 } from "antd";
 
 import {
@@ -23,7 +26,8 @@ import {
   LoginOutlined,
   LogoutOutlined,
   DeleteOutlined,
-  PlusOutlined
+  PlusOutlined,
+  CalendarOutlined
 } from "@ant-design/icons";
 
 import "./Attendance.css";
@@ -54,32 +58,29 @@ function Attendance() {
     ? inEntries[0].time
     : "--:--";
 
-const lastOut = outEntries.length > 0
-  ? outEntries[outEntries.length - 1].time
-  : "--:--";
+  const lastOut = outEntries.length
+    ? outEntries[outEntries.length - 1].time
+    : "--:--";
+    
+  let totalMinutes = 0;
 
-// Calculate total working time
-let totalMinutes = 0;
+  if (firstIn !== "--:--" && lastOut !== "--:--") {
+    const [inHour, inMinute] = firstIn.split(":").map(Number);
+    const [outHour, outMinute] = lastOut.split(":").map(Number);
 
-if (firstIn !== "--:--" && lastOut !== "--:--") {
-  const inTime = firstIn.split(":");
-  const outTime = lastOut.split(":");
+    const inMinutes = inHour * 60 + inMinute;
+    const outMinutes = outHour * 60 + outMinute;
 
-  const inMinutes = Number(inTime[0]) * 60 + Number(inTime[1]);
-  const outMinutes = Number(outTime[0]) * 60 + Number(outTime[1]);
-
-  if (outMinutes >= inMinutes) {
-    totalMinutes = outMinutes - inMinutes;
+    if (outMinutes >= inMinutes) {
+      totalMinutes = outMinutes - inMinutes;
+    }
   }
-}
 
-const totalHours = Math.floor(totalMinutes / 60);
-const remainingMinutes = totalMinutes % 60;
+  const totalHours = Math.floor(totalMinutes / 60);
+  const remainingMinutes = totalMinutes % 60;
 
   function formatTime(time) {
-    if (time === "--:--") {
-      return time;
-    }
+    if (time === "--:--") return time;
 
     return dayjs(time, "HH:mm").format("hh:mm A");
   }
@@ -103,6 +104,7 @@ const remainingMinutes = totalMinutes % 60;
     ]);
 
     setEntryTime(null);
+
     message.success("Attendance entry added.");
   }
 
@@ -118,14 +120,19 @@ const remainingMinutes = totalMinutes % 60;
     {
       title: "S.No",
       key: "serial",
-      width: 75,
+      width: 80,
       render: (_, __, index) => index + 1
     },
     {
-      title: "Time",
+      title: "Attendance Time",
       dataIndex: "time",
       key: "time",
-      render: (time) => formatTime(time)
+      render: (time) => (
+        <Space>
+          <ClockCircleOutlined />
+          <Text strong>{formatTime(time)}</Text>
+        </Space>
+      )
     },
     {
       title: "Entry Type",
@@ -133,19 +140,23 @@ const remainingMinutes = totalMinutes % 60;
       key: "type",
       render: (type) => (
         <Tag color={type === "In" ? "success" : "processing"}>
-          {type === "In" ? "IN" : "OUT"}
+          {type === "In" ? "CHECK IN" : "CHECK OUT"}
         </Tag>
       )
     },
     {
       title: "Action",
       key: "action",
+      width: 100,
+      align: "center",
       render: (_, record) => (
         <Popconfirm
-          title="Delete this entry?"
+          title="Delete attendance entry?"
+          description="Are you sure you want to delete this entry?"
           onConfirm={() => deleteEntry(record.id)}
           okText="Delete"
           cancelText="Cancel"
+          okButtonProps={{ danger: true }}
         >
           <Button
             danger
@@ -158,70 +169,80 @@ const remainingMinutes = totalMinutes % 60;
   ];
 
   return (
-    <Space
-      direction="vertical"
-      size="large"
-      className="attendance-page"
-    >
-      <Space direction="vertical" size={2}>
-        <Title level={2}>Attendance</Title>
-        <Text type="secondary">
-          Record and manage your daily attendance.
-        </Text>
-      </Space>
+    <div className="attendance-page">
 
-      <Card className="attendance-entry-card">
-        <Space direction="vertical" size="middle" className="full-width">
-          <Title level={4}>Add Attendance Entry</Title>
+      <div className="attendance-header">
+        <div>
+          <Title level={2}>Attendance</Title>
 
-          <Text type="secondary">Select attendance date</Text>
+          <Text type="secondary">
+            Record and manage your daily attendance.
+          </Text>
+        </div>
+      </div>
 
-          <DatePicker
-            value={selectedDate}
-            onChange={(date) => {
-              if (date) {
-                setSelectedDate(date);
-              }
-            }}
-            format="DD MMM YYYY"
-            allowClear={false}
-            className="attendance-input"
-          />
+      <Card
+        title={
+          <Space>
+            <PlusOutlined />
+            Add Attendance Entry
+          </Space>
+        }
+        className="attendance-entry-card"
+      >
 
-          <Row gutter={[16, 16]}>
-            <Col xs={24} sm={12}>
-              <Text strong>Entry Type</Text>
+        <Form layout="vertical">
 
-              <Select
-                value={entryType}
-                onChange={setEntryType}
-                className="attendance-input"
-                options={[
-                  {
-                    label: "In - Start / Return to Work",
-                    value: "In"
-                  },
-                  {
-                    label: "Out - Leave / Finish Work",
-                    value: "Out"
-                  }
-                ]}
-              />
+          <Row gutter={[20, 0]}>
+
+            <Col xs={24} md={8}>
+              <Form.Item label="Attendance Date">
+                <DatePicker
+                  value={selectedDate}
+                  onChange={(date) => {
+                    if (date) setSelectedDate(date);
+                  }}
+                  format="DD MMM YYYY"
+                  allowClear={false}
+                  className="attendance-input"
+                />
+              </Form.Item>
             </Col>
 
-            <Col xs={24} sm={12}>
-              <Text strong>Enter Time</Text>
-
-              <TimePicker
-                value={entryTime}
-                onChange={setEntryTime}
-                format="hh:mm A"
-                use12Hours
-                minuteStep={1}
-                placeholder="Select time"
-                className="attendance-input"
-              />
+            <Col xs={24} md={8}>
+              <Form.Item label="Entry Type">
+                <Select
+                  value={entryType}
+                  onChange={setEntryType}
+                  className="attendance-input"
+                  options={[
+                    {
+                      label: "IN - Start / Return to Work",
+                      value: "In"
+                    },
+                    {
+                      label: "OUT - Leave / Finish Work",
+                      value: "Out"
+                    }
+                  ]}
+                />
+              </Form.Item>
             </Col>
+
+            <Col xs={24} md={8}>
+              <Form.Item label="Attendance Time">
+                <TimePicker
+                  value={entryTime}
+                  onChange={setEntryTime}
+                  format="hh:mm A"
+                  use12Hours
+                  minuteStep={1}
+                  placeholder="Select time"
+                  className="attendance-input"
+                />
+              </Form.Item>
+            </Col>
+
           </Row>
 
           <Button
@@ -232,74 +253,106 @@ const remainingMinutes = totalMinutes % 60;
           >
             Add Entry
           </Button>
-        </Space>
+
+        </Form>
       </Card>
 
-      <Title level={4}>Daily Summary</Title>
+      <div className="attendance-section">
 
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={8}>
-          <Card className="attendance-summary-card">
-            <Space>
-              <LoginOutlined className="attendance-icon" />
-              <Text type="secondary">First In</Text>
-            </Space>
+        <Title level={4}>Daily Summary</Title>
 
-            <Title level={3}>
-              {formatTime(firstIn)}
-            </Title>
-          </Card>
-        </Col>
+        <Row gutter={[16, 16]}>
 
-        <Col xs={24} sm={12} lg={8}>
-          <Card className="attendance-summary-card">
-            <Space>
-              <LogoutOutlined className="attendance-icon" />
-              <Text type="secondary">Last Out</Text>
-            </Space>
+          <Col xs={24} sm={12} lg={8}>
+            <Card className="attendance-summary-card">
+              <Statistic
+                title={
+                  <Space>
+                    <LoginOutlined />
+                    First Check In
+                  </Space>
+                }
+                value={formatTime(firstIn)}
+              />
+            </Card>
+          </Col>
 
-            <Title level={3}>
-              {formatTime(lastOut)}
-            </Title>
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} lg={8}>
-          <Card className="attendance-summary-card">
-            <Space>
-              <ClockCircleOutlined className="attendance-icon" />
-              <Text type="secondary">Total Working Hours</Text>
-            </Space>
-        
-            <Title level={3}>
-              {totalHours}h {remainingMinutes}m
-            </Title>
-          </Card>
-        </Col>
-      </Row>
+          <Col xs={24} sm={12} lg={8}>
+            <Card className="attendance-summary-card">
+              <Statistic
+                title={
+                  <Space>
+                    <LogoutOutlined />
+                    Last Check Out
+                  </Space>
+                }
+                value={formatTime(lastOut)}
+              />
+            </Card>
+          </Col>
 
-      <Card className="attendance-history-card">
-        <Space
-          direction="vertical"
-          size="middle"
-          className="full-width"
-        >
-          <Title level={4}>
-            Entries for {selectedDate.format("DD MMM YYYY")}
-          </Title>
+          <Col xs={24} sm={12} lg={8}>
+            <Card className="attendance-summary-card">
+              <Statistic
+                title={
+                  <Space>
+                    <ClockCircleOutlined />
+                    Total Working Hours
+                  </Space>
+                }
+                value={`${totalHours}h ${remainingMinutes}m`}
+              />
+            </Card>
+          </Col>
 
-          <Table
-            columns={columns}
-            dataSource={todayEntries}
-            rowKey="id"
-            pagination={false}
-            scroll={{ x: 400 }}
-            locale={{
-              emptyText: "No attendance entries for this date."
+        </Row>
+      </div>
+
+      {/* Attendance History */}
+      <Card
+        className="attendance-history-card"
+        title={
+          <Space>
+            <CalendarOutlined />
+            Attendance History
+          </Space>
+        }
+        extra={
+          <DatePicker
+            value={selectedDate}
+            onChange={(date) => {
+              if (date) setSelectedDate(date);
             }}
+            format="DD MMM YYYY"
+            allowClear={false}
           />
-        </Space>
+        }
+      >
+
+        <div className="attendance-history-heading">
+          <Text type="secondary">
+            Entries for {selectedDate.format("DD MMM YYYY")}
+          </Text>
+        </div>
+
+        <Table
+          columns={columns}
+          dataSource={todayEntries}
+          rowKey="id"
+          pagination={false}
+          scroll={{ x: 450 }}
+          locale={{
+            emptyText: (
+              <Empty
+                description="No attendance entries for this date"
+              />
+            )
+          }}
+        />
+
       </Card>
-    </Space>
+
+    </div>
   );
 }
 
