@@ -23,8 +23,6 @@ import "./Login.css";
 const { Title, Text } = Typography;
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -33,32 +31,49 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  function handleSubmit() {
+  async function handleSubmit(values) {
     setError("");
-
-    if (!email.trim() || !password) {
-      setError("Please enter your email and password.");
-      return;
-    }
-
     setLoading(true);
 
-    const success = login(
-      email.trim().toLowerCase(),
-      password
-    );
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: values.email.trim().toLowerCase(),
+            password: values.password
+          })
+        }
+      );
 
-    if (!success) {
-      setError("Invalid email or password.");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || data.detail || "Invalid email or password."
+        );
+      }
+
+      login(data);
+
+      // Redirect after successful login
+      navigate(location.state?.from || "/dashboard", {
+        replace: true
+      });
+
+    } catch (err) {
+      setError(
+        err.message === "Failed to fetch"
+          ? "Unable to connect to the server. Please try again."
+          : err.message
+      );
+    } finally {
       setLoading(false);
-      return;
     }
-
-    navigate(location.state?.from || "/dashboard", {
-      replace: true
-    });
-
-    setLoading(false);
   }
 
   return (
@@ -97,6 +112,7 @@ function Login() {
           onFinish={handleSubmit}
           requiredMark={false}
           className="login-form"
+          autoComplete="on"
         >
 
           <Form.Item
@@ -118,8 +134,6 @@ function Login() {
               size="large"
               prefix={<UserOutlined />}
               placeholder="Enter your email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
               autoComplete="username"
             />
 
@@ -140,8 +154,6 @@ function Login() {
               size="large"
               prefix={<LockOutlined />}
               placeholder="Enter your password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
               autoComplete="current-password"
             />
 
@@ -169,22 +181,6 @@ function Login() {
             Don't have an account?{" "}
             <Link to="/register">Create an account</Link>
           </Text>
-        </div>
-
-        <div className="login-demo">
-
-          <Text strong>
-            Demo Credentials
-          </Text>
-
-          <Text type="secondary">
-            Email: admin@example.com
-          </Text>
-
-          <Text type="secondary">
-            Password: Admin123!
-          </Text>
-
         </div>
 
       </Card>

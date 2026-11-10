@@ -1,126 +1,54 @@
 
 import { createContext, useContext, useState } from "react";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
 
-  // Get registered employees from localStorage
-  const [users, setUsers] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("demoUsers")) || [];
-    } catch {
-      return [];
-    }
-  });
-
-  // Get currently logged-in user
   const [user, setUser] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem("demoUser")) || null;
+      return JSON.parse(localStorage.getItem("authUser")) || null;
     } catch {
       return null;
     }
   });
 
-  // Registration
-  function register(name, email, password, designation) {
-
-    const existingUser = users.find(
-      (item) => item.email === email.toLowerCase()
-    );
-
-    if (existingUser) {
-      return "This email is already registered.";
+  function login(userDetails) {
+    if (!userDetails || !userDetails.email || !userDetails.token) {
+      throw new Error("Invalid login response.");
     }
-
-    const newUser = {
-      id: Date.now(),
-      name: name,
-      email: email.toLowerCase(),
-      password: password,
-      designation: designation,
+  
+    const loggedInUser = {
+      id: userDetails.id,
+      name: userDetails.name,
+      email: userDetails.email,
+      designation: userDetails.designation,
+      token: userDetails.token
     };
-
-    const updatedUsers = [...users, newUser];
-
+  
     localStorage.setItem(
-      "demoUsers",
-      JSON.stringify(updatedUsers)
+      "authUser",
+      JSON.stringify(loggedInUser)
     );
-
-    setUsers(updatedUsers);
-
-    return "";
+  
+    setUser(loggedInUser);
   }
 
-  // Login
-  function login(email, password) {
-
-    // Existing static login credential
-    const isStaticUser =
-      email === "admin@example.com" &&
-      password === "Admin123!";
-
-    if (isStaticUser) {
-      const userDetails = {
-        name: "Admin",
-        email: "admin@example.com",
-        designation: "Manager",
-      };
-
-      localStorage.setItem(
-        "demoUser",
-        JSON.stringify(userDetails)
-      );
-
-      setUser(userDetails);
-
-      return true;
-    }
-
-    // Check registered employees
-    const foundUser = users.find(
-      (item) =>
-        item.email === email.toLowerCase() &&
-        item.password === password
-    );
-
-    if (!foundUser) {
-      return false;
-    }
-
-    const userDetails = {
-      id: foundUser.id,
-      name: foundUser.name,
-      email: foundUser.email,
-      designation: foundUser.designation,
-    };
-
-    localStorage.setItem(
-      "demoUser",
-      JSON.stringify(userDetails)
-    );
-
-    setUser(userDetails);
-
-    return true;
-  }
-
-  // Logout
   function logout() {
-    localStorage.removeItem("demoUser");
+    localStorage.removeItem("authUser");
     setUser(null);
   }
+
+  const isManager =
+    user?.designation?.trim().toLowerCase() === "manager";
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        users,
-        register,
         login,
         logout,
+        isManager
       }}
     >
       {children}

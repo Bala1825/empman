@@ -76,3 +76,19 @@
   font-weight: 600;
   border: none;
 }
+
+.sidebar-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sidebar-designation {
+  color: #a5d6bc !important;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sidebar-email {
+  overflow-wrap: anywhere;
+}

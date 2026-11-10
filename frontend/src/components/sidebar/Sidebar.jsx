@@ -122,14 +122,23 @@ function Navbar() {
           className="sidebar-menu"
         />
 
-        <div className="sidebar-user">
-          <Space>
-            <Avatar icon={<UserOutlined />} />
-            <Text className="sidebar-email">
-              {user?.email || "User"}
-            </Text>
-          </Space>
 
+        <div className="sidebar-user">
+  
+          <Space align="center" size={12}>
+            <Avatar icon={<UserOutlined />} />
+  
+            <div className="sidebar-user-info">
+              <Text className="sidebar-email">
+                {user?.name || "User"}
+              </Text>
+  
+              <Text className="sidebar-designation">
+                {user?.designation || "Employee"}
+              </Text>
+            </div>
+          </Space>
+  
           <Button
             block
             icon={<LogoutOutlined />}
@@ -138,8 +147,8 @@ function Navbar() {
           >
             Logout
           </Button>
+  
         </div>
-
       </Space>
     </Sider>
   );
