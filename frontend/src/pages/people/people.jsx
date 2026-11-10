@@ -28,7 +28,7 @@ const departments = [
   "IT", "HR", "Finance", "Design", "Administration"
 ];
 
-// Convert backend response into frontend format
+
 function mapPerson(person) {
   return {
     ...person,
@@ -38,7 +38,7 @@ function mapPerson(person) {
   };
 }
 
-// Read backend errors
+
 async function checkResponse(response) {
   if (response.ok) {
     if (response.status === 204) return null;
@@ -65,7 +65,7 @@ function People() {
 
   const { user } = useAuth();
 
-  // Fetch people from MySQL through Spring Boot
+
   async function fetchPeople() {
     setLoading(true);
   
@@ -91,7 +91,7 @@ function People() {
     fetchPeople();
   }, []);
 
-  // Statistics
+
   const totalEmployees = employees.length;
 
   const activeEmployees = employees.filter(
@@ -102,7 +102,7 @@ function People() {
     emp => emp.status === "Inactive"
   ).length;
 
-  // Search and filter
+
   const filteredEmployees = useMemo(() => {
     return employees.filter(emp => {
       const searchText = search.toLowerCase();
@@ -119,7 +119,7 @@ function People() {
     });
   }, [employees, search, statusFilter]);
 
-  // Open Add modal
+
   function openAddModal() {
     setEditingEmployee(null);
     form.resetFields();
@@ -127,7 +127,7 @@ function People() {
     setModalOpen(true);
   }
 
-  // Open Edit modal
+
   function openEditModal(employee) {
     setEditingEmployee(employee);
 
@@ -147,7 +147,7 @@ function People() {
     setModalOpen(true);
   }
 
-  // Add or update through backend
+
   async function handleSave(values) {
     setSaving(true);
 
@@ -204,7 +204,7 @@ function People() {
     }
   }
 
-  // Delete through backend
+
   async function handleDelete(id) {
     try {
       const response = await fetch(`${API_URL}/${id}`, {
@@ -229,7 +229,7 @@ function People() {
     }
   }
 
-  // Table columns
+
   const columns = [
     {
       title: "Employee ID",

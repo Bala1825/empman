@@ -8,12 +8,14 @@ import java.util.List;
 
 public interface AttendanceService {
 
-    Attendance saveAttendance(Attendance attendance);
+    Attendance saveAttendance(Long employeeId, Attendance attendance);
+
+    List<Attendance> getAttendance(Long employeeId);
 
     List<Attendance> getAttendanceByEmployeeAndDate(
             Long employeeId,
             LocalDate attendanceDate
     );
 
-    void deleteAttendance(Long id);
+    void deleteAttendance(Long employeeId, Long id);
 }

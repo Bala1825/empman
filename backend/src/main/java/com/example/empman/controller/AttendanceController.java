@@ -7,11 +7,13 @@ import com.example.empman.entity.Attendance;
 import com.example.empman.mapper.AttendanceMapper;
 import com.example.empman.service.AttendanceService;
 
+
 import jakarta.validation.Valid;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,16 +33,27 @@ public class AttendanceController {
         this.attendanceService = attendanceService;
         this.attendanceMapper = attendanceMapper;
     }
+    
+    private Long getLoggedInEmployeeId(){
+        return Long.parseLong(
+            SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName()
+        );
+    }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AttendanceResponse saveAttendance(
             @Valid @RequestBody AttendanceRequest request) {
+        
+        Long employeeId = getLoggedInEmployeeId();
 
         Attendance attendance = attendanceMapper.toEntity(request);
 
         Attendance savedAttendance =
-                attendanceService.saveAttendance(attendance);
+                attendanceService.saveAttendance(employeeId, attendance);
 
         return attendanceMapper.toResponse(savedAttendance);
     }
@@ -48,10 +61,12 @@ public class AttendanceController {
 
     @GetMapping
     public List<AttendanceResponse> getAttendance(
-            @RequestParam Long employeeId,
+    
             @RequestParam
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate date) {
+        
+        Long employeeId =  getLoggedInEmployeeId();
 
         List<Attendance> attendanceList =
                 attendanceService.getAttendanceByEmployeeAndDate(
@@ -65,7 +80,10 @@ public class AttendanceController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAttendance(@PathVariable Long id) {
+
+        Long employeeId = getLoggedInEmployeeId();
     
-        attendanceService.deleteAttendance(id);
+        attendanceService.deleteAttendance(employeeId, id);
     }
+
 }

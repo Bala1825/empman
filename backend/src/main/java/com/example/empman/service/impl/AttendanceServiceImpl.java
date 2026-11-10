@@ -22,9 +22,23 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Attendance saveAttendance(Attendance attendance) {
+    public Attendance saveAttendance(
+            Long employeeId,
+            Attendance attendance) {
+
+        attendance.setId(null);
+        attendance.setEmployeeId(employeeId);
 
         return attendanceRepository.save(attendance);
+    }
+
+    @Override
+    public List<Attendance> getAttendance(Long employeeId) {
+
+        return attendanceRepository
+                .findByEmployeeIdOrderByAttendanceDateDescEntryTimeAsc(
+                        employeeId
+                );
     }
 
     @Override
@@ -40,14 +54,20 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void deleteAttendance(Long id) {
+    public void deleteAttendance(Long employeeId, Long id) {
 
-        if (!attendanceRepository.existsById(id)) {
+        Attendance attendance = attendanceRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "Attendance record not found"
+                ));
+
+        if (!attendance.getEmployeeId().equals(employeeId)) {
             throw new RuntimeException(
-                    "Attendance record not found with ID: " + id
+                    "You are not authorized to delete this attendance"
             );
         }
 
-        attendanceRepository.deleteById(id);
+        attendanceRepository.delete(attendance);
     }
 }
